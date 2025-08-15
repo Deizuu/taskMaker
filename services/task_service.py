@@ -3,12 +3,12 @@ from config import get_database_path
 from models import Task
 
 
-def create_task(title: str, description: str):
+def create_task(task: Task):
     with sqlite3.connect(get_database_path()) as conn:
         c = conn.cursor()
         c.execute(
             "INSERT INTO tasks (title, description) VALUES (?, ?)",
-            (title, description)
+            (task.title, task.description)
         )
         conn.commit()
 

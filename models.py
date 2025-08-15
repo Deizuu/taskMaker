@@ -1,8 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Optional
+
 
 @dataclass
 class Task:
-    id: int
+    id: Optional[int] = field(default=None, init=False)
     title: str
     description: str
     completion: bool = False

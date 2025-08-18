@@ -1,15 +1,9 @@
-from services.task_service import create_task
-from services.task_service import update_task
-from services.task_service import get_task_by_id
-from models import Task
-'''
-Welcome to taskMaker.
-What do you want to do?
-1. Add task
-2. List tasks
-3. Rename task
-4. Complete/Uncomplete a task
-'''
+from utils.cli import (
+    handle_task_completion,
+    handle_task_creation,
+    handle_task_listing,
+    handle_task_modification
+)
 
 
 def run_cli():
@@ -23,29 +17,34 @@ def run_cli():
         print("""
             1. Create a task\n
             2. List all tasks\n
-            3. Rename a task\n
+            3. Modify a task\n
             4. Complete/Uncomplete a task\n
             5. Exit the program""")
         user_prompt = input("Enter action number: ")
 
+        if not user_prompt:
+            print("Input cannot be empty. Please enter a valid value.")
+            continue
+
         match user_prompt[0]:
             case "1":
-                title = input("Enter the title for the task: ")
-                description = input(
-                            "Enter task description (Leave empty if none): ")
-                task = Task(title=title, description=description)
-                create_task(task)
+                handle_task_creation()
+
             case "2":
-                pass
+                '''TODO make print() output
+                readable'''
+                handle_task_listing()
 
             case "3":
-                pass
+                '''TODO print all tasks in the table
+                for the user'''
+                handle_task_modification()
 
             case "4":
-                pass
+                handle_task_completion()
 
             case "5":
-                pass
+                running = False
 
             case _:
                 pass

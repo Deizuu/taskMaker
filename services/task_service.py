@@ -13,14 +13,25 @@ def create_task(task: Task):
         conn.commit()
 
 
-def update_task(task: Task):
+def delete_task(id: int):
     with sqlite3.connect(get_database_path()) as conn:
         c = conn.cursor()
         c.execute(
-            "UPDATE tasks SET title=?, description=?, completion=? WHERE id=?",
-            (task.title, task.description, task.completion, task.id)
+            "DELETE FROM tasks where id=?",
+            (id,)
         )
-        conn.commit()
+
+
+def get_all_tasks():
+    with sqlite3.connect(get_database_path()) as conn:
+        c = conn.cursor()
+        c.execute(
+            "SELECT * FROM tasks"
+        )
+        rows = c.fetchall()
+        if rows:
+            return rows
+        return None
 
 
 def get_task_by_id(task_id: int):
@@ -34,3 +45,25 @@ def get_task_by_id(task_id: int):
         if row:
             return Task(*row)
         return None
+
+
+def update_task(id: int, title=None, desc=None, completion=None):
+    fields = []
+    values = []
+    if title is not None:
+        fields.append("title=?")
+        values.append(title)
+    if desc is not None:
+        fields.append("description=?")
+        values.append(desc)
+    if completion is not None:
+        fields.append("completion=?")
+        values.append(completion)
+    if not fields:
+        raise ValueError("No fields to update.")
+    values.append(id)
+    sql = f"UPDATE tasks SET {', '.join(fields)} WHERE id=?"
+    with sqlite3.connect(get_database_path()) as conn:
+        c = conn.cursor()
+        c.execute(sql, values)
+        conn.commit()

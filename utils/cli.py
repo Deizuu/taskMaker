@@ -1,17 +1,18 @@
 from models import Task
 from services.task_service import (
     create_task,
+    delete_task,
     get_all_tasks,
     get_task_by_id,
     update_task
 )
 
-
-def prettify_task_output(task: Task):
-    return (f"{task.title} | ",
-            f"{"Completed" if task.completion else "Not Completed"}",
-            f"\n {task.description}"
-            )
+# Function possibly not needed
+#def prettify_task_output(task: Task):
+#    return (f"{task.title} | ",
+#            f"{"Completed" if task.completion else "Not Completed"}",
+#            f"\n {task.description}"
+#            )
 
 
 def handle_task_creation():
@@ -27,23 +28,42 @@ def handle_task_listing():
 
 
 def handle_task_modification():
-    # TODO fill in input prompts
-    update_task(
-        id=int(input()),
-        title=input(),
-        desc=input()
-    )
-
-
-def handle_task_completion():
-    # TODO fill in input prompt
-    id = int(input(
-        "Enter the ID of the task you want to complete:"))
+    # TODO check if title/description is empty
+    # If empty, leave the name as-is
+    id = int(input("Enter task ID: "))
     task = get_task_by_id(id)
     if task is not None:
         update_task(
             id=id,
-            completion=True if (
-                task.completion is False
-            ) else False
+            title=input("Enter new title: "),
+            desc=input("Enter new description: ")
         )
+
+
+def handle_task_completion():
+    id = int(input("Enter task ID: "))
+    task = get_task_by_id(id)
+    if task is not None:
+        update_task(
+            id=id,
+            completion=True if not task.completion else False
+        )
+
+
+def handle_task_deletion():
+    id = int(input(
+        'Enter the ID of the task you want to delete (type "0" if none): '
+    ))
+    if id == 0:
+        return
+    delete_task(id)
+
+
+def handle_help():
+    print("""
+        1. Create a task\n
+        2. Modify a task\n
+        3. Complete/Uncomplete a task\n
+        4. List all tasks\n
+        5. Delete a task\n
+        6. Exit the program""")

@@ -1,6 +1,8 @@
 from utils.cli import (
+    handle_help,
     handle_task_completion,
     handle_task_creation,
+    handle_task_deletion,
     handle_task_listing,
     handle_task_modification
 )
@@ -11,40 +13,43 @@ def run_cli():
     running = True
     # What the user types in the terminal.
     user_prompt = ""
-    print("""Welcome to taskMaker.\n
-    What do you want to do?""")
+    print("Welcome to taskMaker.")
     while running:
-        print("""
-            1. Create a task\n
-            2. List all tasks\n
-            3. Modify a task\n
-            4. Complete/Uncomplete a task\n
-            5. Exit the program""")
-        user_prompt = input("Enter action number: ")
+        user_prompt = input('What do you want to do? (enter "h" for help): ')
 
         if not user_prompt:
-            print("Input cannot be empty. Please enter a valid value.")
             continue
 
-        match user_prompt[0]:
+        match user_prompt[0].lower():
             case "1":
                 handle_task_creation()
 
             case "2":
-                '''TODO make print() output
-                readable'''
-                handle_task_listing()
-
-            case "3":
                 '''TODO print all tasks in the table
                 for the user'''
                 handle_task_modification()
 
-            case "4":
+            case "3":
+                '''TODO print all tasks in the table
+                for the user'''
                 handle_task_completion()
 
+            case "4":
+                '''TODO make print() output
+                readable'''
+                handle_task_listing()
+
             case "5":
+                '''TODO print all tasks in the table
+                for the user'''
+                handle_task_deletion()
+
+            case "6":
                 running = False
+
+            case "h":
+                # TODO print help
+                handle_help()
 
             case _:
                 pass

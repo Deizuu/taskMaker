@@ -38,16 +38,18 @@ def get_task_by_id(task_id: int):
     with sqlite3.connect(get_database_path()) as conn:
         c = conn.cursor()
         c.execute(
-            "SELECT * FROM tasks WHERE id=?",
+            "SELECT title, description, completion FROM tasks WHERE id=?",
             (task_id,)
         )
         row = c.fetchone()
         if row:
             return Task(*row)
+            return
         return None
 
 
 def update_task(id: int, title=None, desc=None, completion=None):
+    # TODO only take Task value as input (task: Task)
     fields = []
     values = []
     if title is not None:
